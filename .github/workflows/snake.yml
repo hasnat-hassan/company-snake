@@ -1,4 +1,4 @@
-name: Generate Company Snake
+name: Generate Contribution Snakes
 
 on:
   schedule:
@@ -13,14 +13,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: Platane/snk@v3
+      # Checkout repository
+      - uses: actions/checkout@v4
+
+      # Personal Snake
+      - name: Generate Personal Snake
+        uses: Platane/snk@v3
+        with:
+          github_user_name: hasnat-hassan
+          outputs: |
+            dist/personal/github-snake.svg
+            dist/personal/github-snake-dark.svg?palette=github-dark
+
+      # Company Snake
+      - name: Generate Company Snake
+        uses: Platane/snk@v3
         with:
           github_user_name: hasnat-rx
           outputs: |
-            dist/github-snake.svg
-            dist/github-snake-dark.svg?palette=github-dark
+            dist/company/github-snake.svg
+            dist/company/github-snake-dark.svg?palette=github-dark
 
-      - uses: crazy-max/ghaction-github-pages@v4
+      # Publish both snakes
+      - name: Push to output branch
+        uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: output
           build_dir: dist
